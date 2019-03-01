@@ -1,5 +1,4 @@
 module L = Relude.List;
-module O = Relude.Option;
 
 module Direction = {
   type t =
@@ -53,20 +52,19 @@ module Size = {
     toSizings(kind, v) |> L.map(toClassName) |> L.String.joinWith(" ");
 };
 
-module Container = {
-  type direction =
-    | Row
-    | Col;
+module Decoration = {
+  type t =
+    | BgColor(Tailwind.Color.t)
+    | FgColor(Tailwind.Color.t)
+    | Rounded;
 
-  let make = (component, ~direction, ~padding=?, ~spacing=?) => {
-    let directionClassName = Direction.toClassName(direction);
-    let paddingClassName =
-      O.foldStrict("", Size.toClassName(Padding), padding);
-    let className = directionClassName ++ " " ++ paddingClassName;
+  let bgColor = color => BgColor(color);
+  let fgColor = color => FgColor(color);
+  let rounded = Rounded;
 
-    BaseElement.make(component, ~className, ~spacing?);
-  };
+  let toClassName =
+    fun
+    | BgColor(color) => "bg-" ++ Tailwind.Color.toClassName(color)
+    | FgColor(color) => "fg-" ++ Tailwind.Color.toClassName(color)
+    | Rounded => "rounded";
 };
-
-let component = ReasonReact.statelessComponent(__MODULE__);
-let make = Container.make(component, ~direction=Row);
