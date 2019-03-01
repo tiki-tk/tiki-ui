@@ -1,0 +1,11 @@
+# Node
+/node_modules/
+
+# Bucklescript
+/lib/
+**/*.bs.js
+.bsb.lock
+.merlin
+
+# Bundled
+/dist/
