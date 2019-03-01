@@ -36,13 +36,37 @@ module Directional = {
     | Row
     | Col;
 
-  let make = (component, ~direction, ~padding=?, ~spacing=?) => {
-    let className =
-      Attribute.Direction.toClassName(direction)
-      ++ " "
-      ++ O.foldStrict("", Attribute.Size.toClassName(Padding), padding);
+  let make =
+      (
+        component,
+        ~direction,
+        ~padding=?,
+        ~paddingX=?,
+        ~paddingY=?,
+        ~paddingTop=?,
+        ~paddingBottom=?,
+        ~paddingLeft=?,
+        ~paddingRight=?,
+      ) => {
+    let toPaddingClassName = side =>
+      O.foldStrict("", v =>
+        Attribute.Size.(make(Padding, side, v) |> toClassName)
+      );
 
-    Base.make(component, ~className, ~spacing?);
+    let className =
+      [
+        Attribute.Direction.toClassName(direction),
+        toPaddingClassName(All, padding),
+        toPaddingClassName(Horizontal, paddingX),
+        toPaddingClassName(Vertical, paddingY),
+        toPaddingClassName(Top, paddingTop),
+        toPaddingClassName(Bottom, paddingBottom),
+        toPaddingClassName(Left, paddingLeft),
+        toPaddingClassName(Right, paddingRight),
+      ]
+      |> L.String.joinWith(" ");
+
+    Base.make(component, ~className);
   };
 };
 

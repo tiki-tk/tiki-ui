@@ -9,7 +9,7 @@ module SimpleExample = {
         Decoration.bgColor(Tailwind.Color.make(Grey, Lighter)),
       ];
 
-      <Row decoration padding={Attribute.Size.xy(~x=S4, ~y=S2)}>
+      <Row decoration padding=S4 paddingY=S2>
         <p> {ReasonReact.string("First")} </p>
         <p> {ReasonReact.string("Second")} </p>
         <p> {ReasonReact.string("Third")} </p>
