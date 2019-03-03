@@ -28,6 +28,24 @@ module Size = {
     | S24
     | S32;
 
+  let each = [
+    Px,
+    S0,
+    S1,
+    S2,
+    S3,
+    S4,
+    S5,
+    S6,
+    S8,
+    S10,
+    S12,
+    S16,
+    S20,
+    S24,
+    S32,
+  ];
+
   let toPartialClassName =
     fun
     | Px => "px"

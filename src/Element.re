@@ -2,10 +2,63 @@ module A = Relude.Array;
 module L = Relude.List;
 module O = Relude.Option;
 
+/* TODO: use Webapi */
+module DomUtil = {
+  let getChildren: (. Dom.element) => array(Dom.element) = [%bs.raw
+    {|
+    function (parent) {
+      return [].slice.call(parent.children);
+    }
+  |}
+  ];
+
+  let removeClasses: (. array(string), Dom.element) => unit = [%bs.raw
+    {|
+    function (classNames, el) {
+      classNames.forEach(function (cn) { el.classList.remove(cn) });
+    }
+  |}
+  ];
+
+  let addClass: (. string, Dom.element) => unit = [%bs.raw
+    {|
+    function (className, el) {
+      el.classList.add(className);
+    }
+  |}
+  ];
+};
+
 module Base = {
+  type state = {el: ref(option(Dom.element))};
+  let setContainer = (el, self) =>
+    self.ReasonReact.state.el := Js.Nullable.toOption(el);
+
+  let setChildrenMargin = (container, size) => {
+    let classNameForSize = size =>
+      Attribute.Size.(make(Margin, Left, size) |> toClassName);
+
+    let allMarginClasses =
+      Attribute.Size.Size.each |> L.map(classNameForSize) |> L.toArray;
+
+    let currentMarginClass = O.foldStrict("", classNameForSize, size);
+
+    switch (container) {
+    | Some(el) =>
+      let children = DomUtil.getChildren(. el);
+      children
+      |> A.tailOrEmpty
+      |> A.forEachWithIndex((el, i) => {
+          DomUtil.removeClasses(. allMarginClasses, el);
+          DomUtil.addClass(. currentMarginClass, el);
+         });
+    | None => ()
+    };
+  };
+
+  let component = ReasonReact.reducerComponent(__MODULE__);
   let make =
       (
-        component,
         ~tag="div",
         ~className,
         ~decoration=[],
@@ -14,8 +67,14 @@ module Base = {
         children,
       ) => {
     ...component,
-    ReasonReact.didMount: _ => O.map(v => v + 1, spacing) |> Js.log,
-    render: _ => {
+    initialState: () => {el: ref(None)},
+    reducer: (_action: unit, _state: state) => NoUpdate,
+    didMount: self => setChildrenMargin(self.state.el^, spacing),
+    willReceiveProps: self => {
+      setChildrenMargin(self.state.el^, spacing);
+      self.state;
+    },
+    render: self => {
       let decorationClasses =
         decoration
         |> L.map(Attribute.Decoration.toClassName)
@@ -24,7 +83,13 @@ module Base = {
 
       ReactDOMRe.createElementVariadic(
         tag,
-        ~props=ReactDOMRe.props(~className, ~onClick?, ()),
+        ~props=
+          ReactDOMRe.props(
+            ~className,
+            ~onClick?,
+            ~ref=self.handle(setContainer),
+            (),
+          ),
         children,
       );
     },
@@ -38,7 +103,6 @@ module Directional = {
 
   let make =
       (
-        component,
         ~direction,
         ~padding=?,
         ~paddingX=?,
@@ -66,11 +130,11 @@ module Directional = {
       ]
       |> L.String.joinWith(" ");
 
-    Base.make(component, ~className);
+    Base.make(~className);
   };
 };
 
 module Row = {
   let component = ReasonReact.statelessComponent(__MODULE__);
-  let make = Directional.make(component, ~direction=Row);
+  let make = Directional.make(~direction=Row);
 };
