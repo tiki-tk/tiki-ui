@@ -45,13 +45,12 @@ module Base = {
 
     switch (container) {
     | Some(el) =>
-      let children = DomUtil.getChildren(. el);
-      children
+      DomUtil.getChildren(. el)
       |> A.tailOrEmpty
-      |> A.forEachWithIndex((el, i) => {
-          DomUtil.removeClasses(. allMarginClasses, el);
-          DomUtil.addClass(. currentMarginClass, el);
-         });
+      |> A.forEach(el => {
+           DomUtil.removeClasses(. allMarginClasses, el);
+           DomUtil.addClass(. currentMarginClass, el);
+         })
     | None => ()
     };
   };
@@ -60,8 +59,15 @@ module Base = {
   let make =
       (
         ~tag="div",
-        ~className,
+        ~className="",
         ~decoration=[],
+        ~padding=?,
+        ~paddingX=?,
+        ~paddingY=?,
+        ~paddingTop=?,
+        ~paddingBottom=?,
+        ~paddingLeft=?,
+        ~paddingRight=?,
         ~spacing=?,
         ~onClick=?,
         children,
@@ -75,11 +81,32 @@ module Base = {
       self.state;
     },
     render: self => {
+      let combineNonEmpty = xs =>
+        xs |> L.foldLeft((s, x) => x == "" ? s : s ++ " " ++ x, "");
+
+      let flattenClassNames = xss =>
+        L.map(combineNonEmpty, xss) |> combineNonEmpty;
+
+      let paddingToClassName = side =>
+        O.foldStrict("", v =>
+          Attribute.Size.(make(Padding, side, v) |> toClassName)
+        );
+
+      let paddingClasses = [
+        paddingToClassName(All, padding),
+        paddingToClassName(Horizontal, paddingX),
+        paddingToClassName(Vertical, paddingY),
+        paddingToClassName(Top, paddingTop),
+        paddingToClassName(Bottom, paddingBottom),
+        paddingToClassName(Left, paddingLeft),
+        paddingToClassName(Right, paddingRight),
+      ];
+
       let decorationClasses =
-        decoration
-        |> L.map(Attribute.Decoration.toClassName)
-        |> L.String.joinWith(" ");
-      let className = className ++ " " ++ decorationClasses;
+        decoration |> L.map(Attribute.Decoration.toClassName);
+
+      let className =
+        flattenClassNames([[className], paddingClasses, decorationClasses]);
 
       ReactDOMRe.createElementVariadic(
         tag,
@@ -101,40 +128,28 @@ module Directional = {
     | Row
     | Col;
 
-  let make =
-      (
-        ~direction,
-        ~padding=?,
-        ~paddingX=?,
-        ~paddingY=?,
-        ~paddingTop=?,
-        ~paddingBottom=?,
-        ~paddingLeft=?,
-        ~paddingRight=?,
-      ) => {
-    let toPaddingClassName = side =>
-      O.foldStrict("", v =>
-        Attribute.Size.(make(Padding, side, v) |> toClassName)
-      );
-
-    let className =
-      [
-        Attribute.Direction.toClassName(direction),
-        toPaddingClassName(All, padding),
-        toPaddingClassName(Horizontal, paddingX),
-        toPaddingClassName(Vertical, paddingY),
-        toPaddingClassName(Top, paddingTop),
-        toPaddingClassName(Bottom, paddingBottom),
-        toPaddingClassName(Left, paddingLeft),
-        toPaddingClassName(Right, paddingRight),
-      ]
-      |> L.String.joinWith(" ");
-
-    Base.make(~className);
+  let make = (~direction) => {
+    let className = Attribute.Direction.toClassName(direction);
+    Base.make(~tag="div", ~className);
   };
 };
 
 module Row = {
-  let component = ReasonReact.statelessComponent(__MODULE__);
   let make = Directional.make(~direction=Row);
+};
+
+module Col = {
+  let make = Directional.make(~direction=Col);
+};
+
+module El = {
+  let make = Base.make(~spacing=?None)
+};
+
+module P = {
+  let make = Base.make(~tag="p", ~spacing=?None);
+};
+
+module Button = {
+  let make = Base.make(~tag="Button", ~spacing=?None);
 };

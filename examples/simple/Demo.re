@@ -9,10 +9,18 @@ module SimpleExample = {
         Decoration.bgColor(Tailwind.Color.make(Grey, Lighter)),
       ];
 
+      let btnDecoration = [
+        Decoration.bgColor(Tailwind.Color.make(Blue, Base)),
+        Decoration.fgColor(Tailwind.Color.White),
+        Decoration.rounded,
+      ];
+
       <Row decoration padding=S4 paddingY=S2 spacing=S2>
-        <p> {ReasonReact.string("First")} </p>
-        <p> {ReasonReact.string("Second")} </p>
-        <p> {ReasonReact.string("Third")} </p>
+        <Button paddingY=S2 paddingX=S4 decoration=btnDecoration>
+          {ReasonReact.string("First")}
+        </Button>
+        <Button> {ReasonReact.string("Second")} </Button>
+        <Button> {ReasonReact.string("Third")} </Button>
       </Row>;
     },
   };

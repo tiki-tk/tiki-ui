@@ -30,6 +30,6 @@ module Decoration = {
   let toClassName =
     fun
     | BgColor(color) => "bg-" ++ Tailwind.Color.toClassName(color)
-    | FgColor(color) => "fg-" ++ Tailwind.Color.toClassName(color)
+    | FgColor(color) => "text-" ++ Tailwind.Color.toClassName(color)
     | Rounded => "rounded";
 };
