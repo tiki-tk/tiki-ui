@@ -2,35 +2,57 @@ module A = Relude.Array;
 module L = Relude.List;
 module O = Relude.Option;
 
-/* TODO: use Webapi */
-module DomUtil = {
-  let getChildren: (. Dom.element) => array(Dom.element) = [%bs.raw
-    {|
-    function (parent) {
-      return [].slice.call(parent.children);
-    }
-  |}
-  ];
+module Base = {
+  let make =
+      (
+        transform,
+        ~tag="div",
+        ~className="",
+        ~decoration=[],
+        ~padding=?,
+        ~paddingX=?,
+        ~paddingY=?,
+        ~paddingTop=?,
+        ~paddingBottom=?,
+        ~paddingLeft=?,
+        ~paddingRight=?,
+        ~onClick=?,
+        children,
+      ) => {
+    let paddingToClassName = side =>
+      O.foldStrict("", v =>
+        Attribute.Size.(make(Padding, side, v) |> toClassName)
+      );
 
-  let removeClasses: (. array(string), Dom.element) => unit = [%bs.raw
-    {|
-    function (classNames, el) {
-      classNames.forEach(function (cn) { el.classList.remove(cn) });
-    }
-  |}
-  ];
+    let paddingClasses = [
+      paddingToClassName(All, padding),
+      paddingToClassName(Horizontal, paddingX),
+      paddingToClassName(Vertical, paddingY),
+      paddingToClassName(Top, paddingTop),
+      paddingToClassName(Bottom, paddingBottom),
+      paddingToClassName(Left, paddingLeft),
+      paddingToClassName(Right, paddingRight),
+    ];
 
-  let addClass: (. string, Dom.element) => unit = [%bs.raw
-    {|
-    function (className, el) {
-      el.classList.add(className);
-    }
-  |}
-  ];
+    let decorationClasses =
+      decoration |> L.map(Attribute.Decoration.toClassName);
+
+    let className =
+      ClassName.flatten([[className], paddingClasses, decorationClasses]);
+
+    transform(r =>
+      ReactDOMRe.createElementVariadic(
+        tag,
+        ~props=ReactDOMRe.props(~ref=?r, ~className, ~onClick?, ()),
+        children,
+      )
+    );
+  };
 };
 
-module Base = {
+module Directional = {
   type state = {el: ref(option(Dom.element))};
+
   let setContainer = (el, self) =>
     self.ReasonReact.state.el := Js.Nullable.toOption(el);
 
@@ -55,83 +77,38 @@ module Base = {
     };
   };
 
-  let component = ReasonReact.reducerComponent(__MODULE__);
-  let make =
-      (
-        ~tag="div",
-        ~className="",
-        ~decoration=[],
-        ~padding=?,
-        ~paddingX=?,
-        ~paddingY=?,
-        ~paddingTop=?,
-        ~paddingBottom=?,
-        ~paddingLeft=?,
-        ~paddingRight=?,
-        ~spacing=?,
-        ~onClick=?,
-        children,
-      ) => {
-    ...component,
-    initialState: () => {el: ref(None)},
-    reducer: (_action: unit, _state: state) => NoUpdate,
-    didMount: self => setChildrenMargin(self.state.el^, spacing),
-    willReceiveProps: self => {
-      setChildrenMargin(self.state.el^, spacing);
-      self.state;
-    },
-    render: self => {
-      let combineNonEmpty = xs =>
-        xs |> L.foldLeft((s, x) => x == "" ? s : s ++ " " ++ x, "");
+  let make' = (debug, spacing, el) => {
+    let component = ReasonReact.reducerComponent(debug);
+    {
+      ...component,
+      initialState: () => {el: ref(None)},
+      reducer: (_action: unit, _state: state) => NoUpdate,
+      didMount: self => setChildrenMargin(self.state.el^, spacing),
+      willReceiveProps: self => {
+        setChildrenMargin(self.state.el^, spacing);
+        self.state;
+      },
+      render: self => el(Some(dom => setContainer(dom, self))),
+    };
+  };
 
-      let flattenClassNames = xss =>
-        L.map(combineNonEmpty, xss) |> combineNonEmpty;
-
-      let paddingToClassName = side =>
-        O.foldStrict("", v =>
-          Attribute.Size.(make(Padding, side, v) |> toClassName)
-        );
-
-      let paddingClasses = [
-        paddingToClassName(All, padding),
-        paddingToClassName(Horizontal, paddingX),
-        paddingToClassName(Vertical, paddingY),
-        paddingToClassName(Top, paddingTop),
-        paddingToClassName(Bottom, paddingBottom),
-        paddingToClassName(Left, paddingLeft),
-        paddingToClassName(Right, paddingRight),
-      ];
-
-      let decorationClasses =
-        decoration |> L.map(Attribute.Decoration.toClassName);
-
-      let className =
-        flattenClassNames([[className], paddingClasses, decorationClasses]);
-
-      ReactDOMRe.createElementVariadic(
-        tag,
-        ~props=
-          ReactDOMRe.props(
-            ~className,
-            ~onClick?,
-            ~ref=self.handle(setContainer),
-            (),
-          ),
-        children,
-      );
-    },
+  let make = (~direction, ~spacing=?) => {
+    let className = Attribute.Direction.toClassName(direction);
+    let debug =
+      switch (direction) {
+      | Row => "Row"
+      | Col => "Col"
+      };
+    Base.make(make'(debug, spacing), ~className);
   };
 };
 
-module Directional = {
-  type direction =
-    | Row
-    | Col;
-
-  let make = (~direction) => {
-    let className = Attribute.Direction.toClassName(direction);
-    Base.make(~tag="div", ~className);
-  };
+module Simple = {
+  let make = debug =>
+    Base.make(el => {
+      let component = ReasonReact.statelessComponent(debug);
+      {...component, render: _ => el(None)};
+    });
 };
 
 module Row = {
@@ -142,14 +119,10 @@ module Col = {
   let make = Directional.make(~direction=Col);
 };
 
-module El = {
-  let make = Base.make(~spacing=?None)
-};
-
 module P = {
-  let make = Base.make(~tag="p", ~spacing=?None);
+  let make = Simple.make("P", ~tag="p");
 };
 
 module Button = {
-  let make = Base.make(~tag="Button", ~spacing=?None);
+  let make = Simple.make("Button", ~tag="Button");
 };
