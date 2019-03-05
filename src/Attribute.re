@@ -17,6 +17,13 @@ module Size = {
   include Tailwind.Sizing;
 };
 
+module Align = {
+  type t =
+    | Start
+    | Center
+    | End;
+};
+
 module Decoration = {
   type t =
     | BgColor(Tailwind.Color.t)

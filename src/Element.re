@@ -56,9 +56,17 @@ module Directional = {
   let setContainer = (el, self) =>
     self.ReasonReact.state.el := Js.Nullable.toOption(el);
 
-  let setChildrenMargin = (container, size) => {
+  let setChildrenMargin = (container, dir, size) => {
+    let side =
+      Attribute.(
+        switch (dir) {
+        | Direction.Row => Size.Side.Left
+        | Direction.Col => Size.Side.Top
+        }
+      );
+
     let classNameForSize = size =>
-      Attribute.Size.(make(Margin, Left, size) |> toClassName);
+      Attribute.Size.(make(Margin, side, size) |> toClassName);
 
     let allMarginClasses =
       Attribute.Size.Size.each |> L.map(classNameForSize) |> L.toArray;
@@ -77,15 +85,15 @@ module Directional = {
     };
   };
 
-  let make' = (debug, spacing, el) => {
+  let make' = (debug, direction, spacing, el) => {
     let component = ReasonReact.reducerComponent(debug);
     {
       ...component,
       initialState: () => {el: ref(None)},
       reducer: (_action: unit, _state: state) => NoUpdate,
-      didMount: self => setChildrenMargin(self.state.el^, spacing),
+      didMount: self => setChildrenMargin(self.state.el^, direction, spacing),
       willReceiveProps: self => {
-        setChildrenMargin(self.state.el^, spacing);
+        setChildrenMargin(self.state.el^, direction, spacing);
         self.state;
       },
       render: self => el(Some(dom => setContainer(dom, self))),
@@ -99,7 +107,7 @@ module Directional = {
       | Row => "Row"
       | Col => "Col"
       };
-    Base.make(make'(debug, spacing), ~className);
+    Base.make(make'(debug, direction, spacing), ~className);
   };
 };
 

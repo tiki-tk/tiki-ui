@@ -15,13 +15,18 @@ module SimpleExample = {
         Decoration.rounded,
       ];
 
-      <Row decoration padding=S4 paddingY=S2 spacing=S2>
-        <Button paddingY=S2 paddingX=S4 decoration=btnDecoration>
-          {ReasonReact.string("First")}
-        </Button>
-        <Button> {ReasonReact.string("Second")} </Button>
-        <Button> {ReasonReact.string("Third")} </Button>
-      </Row>;
+      <Col paddingX=S8 paddingY=S3 spacing=S1>
+        <Row decoration padding=S2 spacing=S4>
+          <Button paddingY=S2 paddingX=S4 decoration=btnDecoration>
+            {ReasonReact.string("First")}
+          </Button>
+          <Button> {ReasonReact.string("Second")} </Button>
+          <Button> {ReasonReact.string("Third")} </Button>
+        </Row>
+        <P decoration padding=S2>
+          {ReasonReact.string("This is more content")}
+        </P>
+      </Col>;
     },
   };
 };
