@@ -17,6 +17,7 @@ module Base = {
         ~paddingLeft=?,
         ~paddingRight=?,
         ~onClick=?,
+        ~align=Attribute.Align.Start,
         children,
       ) => {
     let paddingToClassName = side =>
@@ -34,11 +35,17 @@ module Base = {
       paddingToClassName(Right, paddingRight),
     ];
 
+    let alignmentClass = Attribute.Align.toClassName(align);
+
     let decorationClasses =
       decoration |> L.map(Attribute.Decoration.toClassName);
 
     let className =
-      ClassName.flatten([[className], paddingClasses, decorationClasses]);
+      ClassName.flatten([
+        [className, alignmentClass],
+        paddingClasses,
+        decorationClasses,
+      ]);
 
     transform(r =>
       ReactDOMRe.createElementVariadic(
@@ -58,12 +65,10 @@ module Directional = {
 
   let setChildrenMargin = (container, dir, size) => {
     let side =
-      Attribute.(
-        switch (dir) {
-        | Direction.Row => Size.Side.Left
-        | Direction.Col => Size.Side.Top
-        }
-      );
+      switch (dir) {
+      | Attribute.Direction.Row => Attribute.Size.Side.Left
+      | Attribute.Direction.Col => Attribute.Size.Side.Top
+      };
 
     let classNameForSize = size =>
       Attribute.Size.(make(Margin, side, size) |> toClassName);
@@ -71,7 +76,7 @@ module Directional = {
     let allMarginClasses =
       Attribute.Size.Size.each |> L.map(classNameForSize) |> L.toArray;
 
-    let currentMarginClass = O.foldStrict("", classNameForSize, size);
+    let currentMarginClass = O.map(classNameForSize, size);
 
     switch (container) {
     | Some(el) =>
@@ -79,7 +84,11 @@ module Directional = {
       |> A.tailOrEmpty
       |> A.forEach(el => {
            DomUtil.removeClasses(. allMarginClasses, el);
-           DomUtil.addClass(. currentMarginClass, el);
+           O.foldStrict(
+             (),
+             cn => DomUtil.addClass(. cn, el),
+             currentMarginClass,
+           );
          })
     | None => ()
     };
@@ -132,5 +141,13 @@ module P = {
 };
 
 module Button = {
-  let make = Simple.make("Button", ~tag="Button");
+  let make = Simple.make("Button", ~tag="button");
+};
+
+module H1 = {
+  let make = Simple.make("H1", ~tag="h1");
+};
+
+module Link = {
+  let make = Simple.make("Link", ~tag="a");
 };

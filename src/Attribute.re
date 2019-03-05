@@ -22,6 +22,12 @@ module Align = {
     | Start
     | Center
     | End;
+
+  let toClassName =
+    fun
+    | Start => ""
+    | Center => "align-center"
+    | End => "align-end";
 };
 
 module Decoration = {
