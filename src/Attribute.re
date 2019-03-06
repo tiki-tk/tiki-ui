@@ -34,15 +34,21 @@ module Decoration = {
   type t =
     | BgColor(Tailwind.Color.t)
     | FgColor(Tailwind.Color.t)
-    | Rounded;
+    | Rounded
+    | FontSize(Tailwind.Font.Size.t)
+    | FontWeight(Tailwind.Font.Weight.t);
 
   let bgColor = color => BgColor(color);
   let fgColor = color => FgColor(color);
   let rounded = Rounded;
+  let fontSize = size => FontSize(size);
+  let fontWeight = weight => FontWeight(weight);
 
   let toClassName =
     fun
     | BgColor(color) => "bg-" ++ Tailwind.Color.toClassName(color)
     | FgColor(color) => "text-" ++ Tailwind.Color.toClassName(color)
-    | Rounded => "rounded";
+    | Rounded => "rounded"
+    | FontSize(size) => Tailwind.Font.Size.toClassName(size)
+    | FontWeight(weight) => Tailwind.Font.Weight.toClassName(weight);
 };

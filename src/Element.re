@@ -151,3 +151,7 @@ module H1 = {
 module Link = {
   let make = Simple.make("Link", ~tag="a");
 };
+
+module Text = {
+  let make = Simple.make("Text", ~tag="span");
+};

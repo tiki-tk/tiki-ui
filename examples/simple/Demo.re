@@ -17,20 +17,27 @@ module SimpleExample = {
 
       <Col>
         <Row decoration paddingX=S4 paddingY=S2>
-          <Button> {ReasonReact.string("Menu")} </Button>
+          <Text
+            decoration=[
+              Decoration.fontSize(LG),
+              Decoration.fontWeight(Semibold),
+              Decoration.fgColor(Tailwind.Color.make(Blue, Base))
+            ]>
+            {ReasonReact.string("App Name")}
+          </Text>
           <Button align=End paddingY=S2 paddingX=S4 decoration=btnDecoration>
             {ReasonReact.string("User")}
           </Button>
         </Row>
         <Row>
           <Col>
-            <Link padding=S4>{ReasonReact.string("Overview")}</Link>
-            <Link padding=S4>{ReasonReact.string("Contacts")}</Link>
-            <Link padding=S4>{ReasonReact.string("Reports")}</Link>
+            <Link padding=S4> {ReasonReact.string("Overview")} </Link>
+            <Link padding=S4> {ReasonReact.string("Contacts")} </Link>
+            <Link padding=S4> {ReasonReact.string("Reports")} </Link>
           </Col>
           <Col>
-            <H1>{ReasonReact.string("Contacts")}</H1>
-            <P decoration padding=S2>
+            <H1> {ReasonReact.string("Contacts")} </H1>
+            <P padding=S2>
               {ReasonReact.string("This is more content")}
             </P>
           </Col>
