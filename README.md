@@ -11,7 +11,7 @@ Loosely inspired by [elm-ui](https://package.elm-lang.org/packages/mdgriffith/el
 
 **Status: It's Early Days**
 
-It might be possible to make something with Tiki UI in its current state, but you should be reading and willing to jump into the guts.
+It might be possible to make something with Tiki UI in its current state, but you should be ready and willing to jump into the guts.
 
 - [x] Rows and Columns
 - [ ] Wrapped rows (and columns?)
