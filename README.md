@@ -16,10 +16,12 @@ Current: Only use this if you want to contribute
 - [x] Rows and Columns
 - [x] Padding and Spacing
 - [x] Alignment
-- [ ] Width and Height
+- [x] Width and Height
 - [x] A strategy for decorative styles
 - [ ] Hover and Focus styling
 - [ ] Responsive styling
+
+Caveats: even the things that are checked off the list are under-tested.
 
 ## Run this thing
 

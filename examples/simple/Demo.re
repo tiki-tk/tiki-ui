@@ -24,14 +24,15 @@ module SimpleExample = {
               Decoration.fontSize(LG),
               Decoration.fontWeight(Semibold),
               Decoration.fgColor(Tailwind.Color.make(Blue, Base)),
+              /*Decoration.hover(Decoration.bgColor(Blue, Darker)) */
             ]
           />
           <Button alignX=End paddingY=S2 paddingX=S4 decoration=btnDecoration>
             {ReasonReact.string("User")}
           </Button>
         </Row>
-        <Row>
-          <Col>
+        <Row height=Stretch>
+          <Col width={Sizing.rem(12.0)}>
             <Link padding=S4> {ReasonReact.string("Overview")} </Link>
             <Link padding=S4> {ReasonReact.string("Contacts")} </Link>
             <Link padding=S4> {ReasonReact.string("Reports")} </Link>

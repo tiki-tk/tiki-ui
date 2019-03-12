@@ -1,5 +1,5 @@
 {
-  "name": "rr-elm-ui",
+  "name": "tiki-ui",
   "bsc-flags": ["-bs-super-errors"],
   "reason": {
     "react-jsx": 2

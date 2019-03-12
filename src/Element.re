@@ -19,12 +19,17 @@ module Base = {
         ~onClick=?,
         ~alignX=Attribute.Align.Start,
         ~alignY=Attribute.Align.Start,
+        ~height=?,
+        ~width=?,
         ~child=?,
         children,
       ) => {
+    let combineStyles = xs =>
+      L.foldLeft(ReactDOMRe.Style.combine, ReactDOMRe.Style.make(), xs);
+
     let paddingToClassName = side =>
       O.foldStrict("", v =>
-        Attribute.Size.(make(Padding, side, v) |> toClassName)
+        Attribute.Spacing.(make(Padding, side, v) |> toClassName)
       );
 
     let paddingClasses = [
@@ -42,6 +47,12 @@ module Base = {
       Attribute.Align.toClassNameForDir(Y, alignY),
     ];
 
+    let sizingClasses =
+      L.catOptions([
+        O.flatMap(Attribute.Height.toClassName, height),
+        O.flatMap(Attribute.Width.toClassName, width),
+      ]);
+
     let decorationClasses =
       decoration |> L.map(Attribute.Decoration.toClassName);
 
@@ -49,14 +60,23 @@ module Base = {
       ClassName.flatten([
         [className],
         alignmentClasses,
+        sizingClasses,
         paddingClasses,
         decorationClasses,
       ]);
 
+    let style =
+      [
+        height |> O.flatMap(Attribute.Height.toStyle),
+        width |> O.flatMap(Attribute.Width.toStyle),
+      ]
+      |> L.catOptions
+      |> combineStyles;
+
     transform(r =>
       ReactDOMRe.createElementVariadic(
         tag,
-        ~props=ReactDOMRe.props(~ref=?r, ~className, ~onClick?, ()),
+        ~props=ReactDOMRe.props(~ref=?r, ~style, ~className, ~onClick?, ()),
         O.foldStrict(children, A.pure, child),
       )
     );
@@ -69,20 +89,20 @@ module Directional = {
   let setContainer = (el, self) =>
     self.ReasonReact.state.el := Js.Nullable.toOption(el);
 
-  let setChildrenMargin = (container, dir, size) => {
+  let setChildrenMargin = (container, dir, amt) => {
     let side =
       switch (dir) {
-      | Attribute.Direction.Row => Attribute.Size.Side.Left
-      | Attribute.Direction.Col => Attribute.Size.Side.Top
+      | Attribute.Direction.Row => Attribute.Spacing.Side.Left
+      | Attribute.Direction.Col => Attribute.Spacing.Side.Top
       };
 
     let classNameForSize = size =>
-      Attribute.Size.(make(Margin, side, size) |> toClassName);
+      Attribute.Spacing.(make(Margin, side, size) |> toClassName);
 
     let allMarginClasses =
-      Attribute.Size.Size.each |> L.map(classNameForSize) |> L.toArray;
+      Attribute.Spacing.Size.each |> L.map(classNameForSize) |> L.toArray;
 
-    let currentMarginClass = O.map(classNameForSize, size);
+    let currentMarginClass = O.map(classNameForSize, amt);
 
     switch (container) {
     | Some(el) =>

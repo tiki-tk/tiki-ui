@@ -1,4 +1,5 @@
 module L = Relude.List;
+module O = Relude.Option;
 
 module Direction = {
   type t =
@@ -13,8 +14,24 @@ module Direction = {
   let toClassName = v => toFlex(v) |> Tailwind.Flex.toClassName;
 };
 
-module Size = {
+module Spacing = {
+  include Tailwind.Spacing;
+};
+
+module Sizing = {
   include Tailwind.Sizing;
+};
+
+module Width = {
+  let toClassName = v => Sizing.toClassName(v) |> O.map(str => "w-" ++ str);
+  let toStyle = v =>
+    Sizing.toStyle(v) |> O.map(width => ReactDOMRe.Style.make(~width, ()));
+};
+
+module Height = {
+  let toClassName = v => Sizing.toClassName(v) |> O.map(str => "h-" ++ str);
+  let toStyle = v =>
+    Sizing.toStyle(v) |> O.map(height => ReactDOMRe.Style.make(~height, ()));
 };
 
 module Align = {
