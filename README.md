@@ -9,17 +9,29 @@ Loosely inspired by [elm-ui](https://package.elm-lang.org/packages/mdgriffith/el
 - Layout and style typechecked by the ReasonML/Bucklescript tooling
 - CSS vs css-in-js is an implementation detail
 
-**Status**
+**Status: It's Early Days**
 
-Current: Only use this if you want to contribute
+It might be possible to make something with Tiki UI in its current state, but you should be reading and willing to jump into the guts.
 
 - [x] Rows and Columns
+- [ ] Wrapped rows (and columns?)
+- [ ] Overlapping elements
 - [x] Padding and Spacing
 - [x] Alignment
 - [x] Width and Height
-- [x] A strategy for decorative styles
 - [ ] Hover and Focus styling
 - [ ] Responsive styling
+- [ ] Decorative styles
+  - [x] Background color
+  - [ ] Background gradiant
+  - [ ] Background image
+  - [x] Text color
+  - [x] Font styles
+  - [ ] Borders
+  - [ ] Shadows
+  - [x] Rounded corners
+  - [ ] Opacity
+  - [ ] Cursor
 
 Caveats: even the things that are checked off the list are under-tested.
 
@@ -41,7 +53,3 @@ npm run dev
 # or make a production build
 npm run prod
 ```
-
-## Status
-
-It's early days.
