@@ -18,6 +18,7 @@ module Base = {
         ~paddingRight=?,
         ~onClick=?,
         ~align=Attribute.Align.Start,
+        ~child=?,
         children,
       ) => {
     let paddingToClassName = side =>
@@ -51,7 +52,7 @@ module Base = {
       ReactDOMRe.createElementVariadic(
         tag,
         ~props=ReactDOMRe.props(~ref=?r, ~className, ~onClick?, ()),
-        children,
+        O.foldStrict(children, A.pure, child),
       )
     );
   };
@@ -153,5 +154,6 @@ module Link = {
 };
 
 module Text = {
-  let make = Simple.make("Text", ~tag="span");
+  let make = (~text) =>
+    Simple.make("Text", ~tag="span", ~child=ReasonReact.string(text));
 };

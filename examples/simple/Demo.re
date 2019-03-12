@@ -18,13 +18,13 @@ module SimpleExample = {
       <Col>
         <Row decoration paddingX=S4 paddingY=S2>
           <Text
+            text="App Name"
             decoration=[
               Decoration.fontSize(LG),
               Decoration.fontWeight(Semibold),
-              Decoration.fgColor(Tailwind.Color.make(Blue, Base))
-            ]>
-            {ReasonReact.string("App Name")}
-          </Text>
+              Decoration.fgColor(Tailwind.Color.make(Blue, Base)),
+            ]
+          />
           <Button align=End paddingY=S2 paddingX=S4 decoration=btnDecoration>
             {ReasonReact.string("User")}
           </Button>
@@ -37,9 +37,7 @@ module SimpleExample = {
           </Col>
           <Col>
             <H1> {ReasonReact.string("Contacts")} </H1>
-            <P padding=S2>
-              {ReasonReact.string("This is more content")}
-            </P>
+            <P padding=S2> {ReasonReact.string("This is more content")} </P>
           </Col>
         </Row>
       </Col>;
