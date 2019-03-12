@@ -17,7 +17,8 @@ module Base = {
         ~paddingLeft=?,
         ~paddingRight=?,
         ~onClick=?,
-        ~align=Attribute.Align.Start,
+        ~alignX=Attribute.Align.Start,
+        ~alignY=Attribute.Align.Start,
         ~child=?,
         children,
       ) => {
@@ -36,14 +37,18 @@ module Base = {
       paddingToClassName(Right, paddingRight),
     ];
 
-    let alignmentClass = Attribute.Align.toClassName(align);
+    let alignmentClasses = [
+      Attribute.Align.toClassNameForDir(X, alignX),
+      Attribute.Align.toClassNameForDir(Y, alignY),
+    ];
 
     let decorationClasses =
       decoration |> L.map(Attribute.Decoration.toClassName);
 
     let className =
       ClassName.flatten([
-        [className, alignmentClass],
+        [className],
+        alignmentClasses,
         paddingClasses,
         decorationClasses,
       ]);

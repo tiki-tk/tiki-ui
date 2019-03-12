@@ -18,6 +18,7 @@ module SimpleExample = {
       <Col>
         <Row decoration paddingX=S4 paddingY=S2>
           <Text
+            alignY=Center
             text="App Name"
             decoration=[
               Decoration.fontSize(LG),
@@ -25,7 +26,7 @@ module SimpleExample = {
               Decoration.fgColor(Tailwind.Color.make(Blue, Base)),
             ]
           />
-          <Button align=End paddingY=S2 paddingX=S4 decoration=btnDecoration>
+          <Button alignX=End paddingY=S2 paddingX=S4 decoration=btnDecoration>
             {ReasonReact.string("User")}
           </Button>
         </Row>

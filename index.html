@@ -8,22 +8,31 @@
   <title>Document</title>
   <link rel="stylesheet" href="dist/index.css" />
   <style>
-    .flex-col>.align-center {
-      margin-top: auto;
-      margin-bottom: auto;
-    }
-
-    .flex-col>.align-end {
-      margin-top: auto;
-    }
-
-    .flex-row>.align-center {
+    .flex-row>.x-align-center {
       margin-left: auto;
       margin-right: auto;
     }
-
-    .flex-row>.align-end {
+    .flex-row>.x-align-end {
       margin-left: auto;
+    }
+    .flex-row>.y-align-center {
+      align-self: center;
+    }
+    .flex-row>.y-align-end {
+      align-self: flex-end;
+    }
+    .flex-col>.x-align-center {
+      align-self: center;
+    }
+    .flex-col>.x-align-end {
+      align-self: flex-end;
+    }
+    .flex-col>.y-align-center {
+      margin-top: auto;
+      margin-bottom: auto;
+    }
+    .flex-col>.y-align-end {
+      margin-top: auto;
     }
   </style>
 </head>

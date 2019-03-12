@@ -18,6 +18,10 @@ module Size = {
 };
 
 module Align = {
+  type dir =
+    | X
+    | Y;
+
   type t =
     | Start
     | Center
@@ -28,6 +32,13 @@ module Align = {
     | Start => ""
     | Center => "align-center"
     | End => "align-end";
+
+  let toClassNameForDir = (dir, align) =>
+    switch (dir) {
+    | _ when align == Start => ""
+    | X => "x-" ++ toClassName(align)
+    | Y => "y-" ++ toClassName(align)
+    };
 };
 
 module Decoration = {

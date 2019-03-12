@@ -9,6 +9,18 @@ Loosely inspired by [elm-ui](https://package.elm-lang.org/packages/mdgriffith/el
 - Layout and style typechecked by the ReasonML/Bucklescript tooling
 - CSS vs css-in-js is an implementation detail
 
+**Status**
+
+Current: Only use this if you want to contribute
+
+- [x] Rows and Columns
+- [x] Padding and Spacing
+- [x] Alignment
+- [ ] Width and Height
+- [x] A strategy for decorative styles
+- [ ] Hover and Focus styling
+- [ ] Responsive styling
+
 ## Run this thing
 
 ```bash
