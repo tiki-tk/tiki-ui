@@ -62,13 +62,19 @@ module Decoration = {
   type t =
     | BgColor(Tailwind.Color.t)
     | FgColor(Tailwind.Color.t)
-    | Rounded
+    | BorderColor(Tailwind.Border.Color.t)
+    | BorderStyle(Tailwind.Border.Style.t)
+    | BorderWidth(Tailwind.Border.Width.t)
+    | BorderRadius(Tailwind.Border.Radius.t)
     | FontSize(Tailwind.Font.Size.t)
     | FontWeight(Tailwind.Font.Weight.t);
 
   let bgColor = color => BgColor(color);
   let fgColor = color => FgColor(color);
-  let rounded = Rounded;
+  let borderColor = color => BorderColor(color);
+  let borderStyle = style => BorderStyle(style);
+  let borderWidth = width => BorderWidth(width);
+  let borderRadius = radius => BorderRadius(radius);
   let fontSize = size => FontSize(size);
   let fontWeight = weight => FontWeight(weight);
 
@@ -76,7 +82,10 @@ module Decoration = {
     fun
     | BgColor(color) => "bg-" ++ Tailwind.Color.toClassName(color)
     | FgColor(color) => "text-" ++ Tailwind.Color.toClassName(color)
-    | Rounded => "rounded"
+    | BorderColor(color) => Tailwind.Border.Color.toClassName(color)
+    | BorderStyle(style) => Tailwind.Border.Style.toClassName(style)
+    | BorderWidth(width) => Tailwind.Border.Width.toClassName(width)
+    | BorderRadius(rad) => Tailwind.Border.Radius.toClassName(rad)
     | FontSize(size) => Tailwind.Font.Size.toClassName(size)
     | FontWeight(weight) => Tailwind.Font.Weight.toClassName(weight);
 };

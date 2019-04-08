@@ -1,3 +1,4 @@
+module Border = Tailwind_Border;
 module Color = Tailwind_Color;
 module Flex = Tailwind_Flex;
 module Font = Tailwind_Font;

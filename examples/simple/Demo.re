@@ -12,7 +12,7 @@ module SimpleExample = {
       let btnDecoration = [
         Decoration.bgColor(Tailwind.Color.make(Blue, Base)),
         Decoration.fgColor(Tailwind.Color.White),
-        Decoration.rounded,
+        Decoration.borderRadius(Tailwind.Border.Radius.Radius(All, Md)),
       ];
 
       <Col>

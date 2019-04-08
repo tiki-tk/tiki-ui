@@ -53,10 +53,9 @@ type t =
 
 let make = (hue, darkness) => Color(hue, darkness);
 
-let toClassName = v =>
-  switch (v) {
+let toClassName =
+  fun
   | Black => "black"
   | White => "white"
   | Color(hue, darkness) =>
-    Hue.toPartialClassName(hue) ++ Darkness.toPartialClassName(darkness)
-  };
+    Hue.toPartialClassName(hue) ++ Darkness.toPartialClassName(darkness);
