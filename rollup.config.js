@@ -32,6 +32,7 @@ const reactPlugins = [
       'node_modules/react-dom/index.js': [
         'render',
         'hydrate',
+        'createPortal',
       ],
     }
   })

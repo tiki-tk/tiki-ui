@@ -11,11 +11,7 @@ module SimpleExample = {
       let headerDecoration = Decoration.[bgColor(Color.make(Blue, Base))];
 
       let logoDecoration =
-        Decoration.[
-          fontSize(LG),
-          fontWeight(Semibold),
-          fgColor(White),
-        ];
+        Decoration.[fontSize(LG), fontWeight(Semibold), fgColor(White)];
 
       let btnDecoration =
         Decoration.[

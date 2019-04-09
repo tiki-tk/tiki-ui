@@ -5,6 +5,7 @@
     "react-jsx": 2
   },
   "bs-dependencies": [
+    "bs-webapi",
     "reason-react",
     "relude"
   ],
