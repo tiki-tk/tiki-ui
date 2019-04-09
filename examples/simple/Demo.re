@@ -6,26 +6,26 @@ module SimpleExample = {
   let make = _children => {
     ...component,
     render: _ => {
-      let decoration = Decoration.[
-        bgColor(Color.make(Grey, Lighter)),
-      ];
+      let decoration = Decoration.[bgColor(Color.make(Grey, Lighter))];
 
-      let btnDecoration = Decoration.[
-        bgColor(Color.make(Blue, Base)),
-        fgColor(Color.White),
-        borderRadius(Tailwind.Border.Radius.Radius(All, Md)),
-      ];
+      let btnDecoration =
+        Decoration.
+          [
+            bgColor(Color.make(Blue, Base)),
+            fgColor(Color.White),
+            borderRadius(Border.Radius.Radius(All, Md)),
+            hover(bgColor(Color.make(Blue, Dark)))
+          ];
 
       <Col>
         <Row decoration paddingX=S4 paddingY=S2>
           <Text
             alignY=Center
             text="App Name"
-            decoration=[
-              Decoration.fontSize(LG),
-              Decoration.fontWeight(Semibold),
-              Decoration.fgColor(Tailwind.Color.make(Blue, Base)),
-              /*Decoration.hover(Decoration.bgColor(Blue, Darker)) */
+            decoration=Decoration.[
+              fontSize(LG),
+              fontWeight(Semibold),
+              fgColor(Color.make(Blue, Base)),
             ]
           />
           <Button alignX=End paddingY=S2 paddingX=S4 decoration=btnDecoration>

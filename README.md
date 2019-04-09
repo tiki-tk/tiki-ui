@@ -27,7 +27,7 @@ It might be possible to make something with Tiki UI in its current state, but yo
   - [ ] Background image
   - [x] Text color
   - [x] Font styles
-  - [ ] Borders
+  - [x] Borders
   - [ ] Shadows
   - [x] Rounded corners
   - [ ] Opacity
