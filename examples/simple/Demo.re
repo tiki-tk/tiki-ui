@@ -1,18 +1,19 @@
 module SimpleExample = {
   open Element;
-  open Attribute;
+  open LayoutProps;
+
   let component = ReasonReact.statelessComponent(__MODULE__);
   let make = _children => {
     ...component,
     render: _ => {
-      let decoration = [
-        Decoration.bgColor(Tailwind.Color.make(Grey, Lighter)),
+      let decoration = Decoration.[
+        bgColor(Color.make(Grey, Lighter)),
       ];
 
-      let btnDecoration = [
-        Decoration.bgColor(Tailwind.Color.make(Blue, Base)),
-        Decoration.fgColor(Tailwind.Color.White),
-        Decoration.borderRadius(Tailwind.Border.Radius.Radius(All, Md)),
+      let btnDecoration = Decoration.[
+        bgColor(Color.make(Blue, Base)),
+        fgColor(Color.White),
+        borderRadius(Tailwind.Border.Radius.Radius(All, Md)),
       ];
 
       <Col>

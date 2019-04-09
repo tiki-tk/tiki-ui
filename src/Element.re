@@ -17,8 +17,8 @@ module Base = {
         ~paddingLeft=?,
         ~paddingRight=?,
         ~onClick=?,
-        ~alignX=Attribute.Align.Start,
-        ~alignY=Attribute.Align.Start,
+        ~alignX=LayoutProps.Align.Start,
+        ~alignY=LayoutProps.Align.Start,
         ~height=?,
         ~width=?,
         ~child=?,
@@ -29,7 +29,7 @@ module Base = {
 
     let paddingToClassName = side =>
       O.foldStrict("", v =>
-        Attribute.Spacing.(make(Padding, side, v) |> toClassName)
+        LayoutProps.Spacing.(make(Padding, side, v) |> toClassName)
       );
 
     let paddingClasses = [
@@ -43,18 +43,18 @@ module Base = {
     ];
 
     let alignmentClasses = [
-      Attribute.Align.toClassNameForDir(X, alignX),
-      Attribute.Align.toClassNameForDir(Y, alignY),
+      LayoutProps.Align.toClassNameForDir(X, alignX),
+      LayoutProps.Align.toClassNameForDir(Y, alignY),
     ];
 
     let sizingClasses =
       L.catOptions([
-        O.flatMap(Attribute.Height.toClassName, height),
-        O.flatMap(Attribute.Width.toClassName, width),
+        O.flatMap(LayoutProps.Height.toClassName, height),
+        O.flatMap(LayoutProps.Width.toClassName, width),
       ]);
 
     let decorationClasses =
-      decoration |> L.map(Attribute.Decoration.toClassName);
+      decoration |> L.map(Decoration.toClassName);
 
     let className =
       ClassName.flatten([
@@ -67,8 +67,8 @@ module Base = {
 
     let style =
       [
-        height |> O.flatMap(Attribute.Height.toStyle),
-        width |> O.flatMap(Attribute.Width.toStyle),
+        height |> O.flatMap(LayoutProps.Height.toStyle),
+        width |> O.flatMap(LayoutProps.Width.toStyle),
       ]
       |> L.catOptions
       |> combineStyles;
@@ -92,15 +92,15 @@ module Directional = {
   let setChildrenMargin = (container, dir, amt) => {
     let side =
       switch (dir) {
-      | Attribute.Direction.Row => Attribute.Spacing.Side.Left
-      | Attribute.Direction.Col => Attribute.Spacing.Side.Top
+      | LayoutProps.Direction.Row => LayoutProps.Spacing.Side.Left
+      | LayoutProps.Direction.Col => LayoutProps.Spacing.Side.Top
       };
 
     let classNameForSize = size =>
-      Attribute.Spacing.(make(Margin, side, size) |> toClassName);
+      LayoutProps.Spacing.(make(Margin, side, size) |> toClassName);
 
     let allMarginClasses =
-      Attribute.Spacing.Size.each |> L.map(classNameForSize) |> L.toArray;
+      LayoutProps.Spacing.Size.each |> L.map(classNameForSize) |> L.toArray;
 
     let currentMarginClass = O.map(classNameForSize, amt);
 
@@ -136,7 +136,7 @@ module Directional = {
   };
 
   let make = (~direction, ~spacing=?) => {
-    let className = Attribute.Direction.toClassName(direction);
+    let className = LayoutProps.Direction.toClassName(direction);
     let debug =
       switch (direction) {
       | Row => "Row"
