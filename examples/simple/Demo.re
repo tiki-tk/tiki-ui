@@ -1,6 +1,7 @@
 module SimpleExample = {
   open Element;
-  open LayoutProps;
+  module Decoration = Attribute.Decoration;
+  module Sizing = Attribute.Layout.Sizing;
 
   let component = ReasonReact.statelessComponent(__MODULE__);
   let make = _children => {
