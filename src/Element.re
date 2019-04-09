@@ -6,6 +6,7 @@ module Base = {
   let make =
       (
         transform,
+        transformChildren,
         ~tag="div",
         ~className="",
         ~decoration=[],
@@ -21,7 +22,6 @@ module Base = {
         ~alignY=LayoutProps.Align.Start,
         ~height=?,
         ~width=?,
-        ~child=?,
         children,
       ) => {
     let combineStyles = xs =>
@@ -53,8 +53,7 @@ module Base = {
         O.flatMap(LayoutProps.Width.toClassName, width),
       ]);
 
-    let decorationClasses =
-      decoration |> L.map(Decoration.toClassName);
+    let decorationClasses = decoration |> L.map(Decoration.toClassName);
 
     let className =
       ClassName.flatten([
@@ -77,7 +76,7 @@ module Base = {
       ReactDOMRe.createElementVariadic(
         tag,
         ~props=ReactDOMRe.props(~ref=?r, ~style, ~className, ~onClick?, ()),
-        O.foldStrict(children, A.pure, child),
+        A.map(transformChildren, children),
       )
     );
   };
@@ -142,16 +141,19 @@ module Directional = {
       | Row => "Row"
       | Col => "Col"
       };
-    Base.make(make'(debug, direction, spacing), ~className);
+    Base.make(make'(debug, direction, spacing), a => a, ~className);
   };
 };
 
 module Simple = {
   let make = debug =>
-    Base.make(el => {
-      let component = ReasonReact.statelessComponent(debug);
-      {...component, render: _ => el(None)};
-    });
+    Base.make(
+      el => {
+        let component = ReasonReact.statelessComponent(debug);
+        {...component, render: _ => el(None)};
+      },
+      a => a,
+    );
 };
 
 module Row = {
@@ -179,6 +181,13 @@ module Link = {
 };
 
 module Text = {
-  let make = (~text) =>
-    Simple.make("Text", ~tag="span", ~child=ReasonReact.string(text));
+  let make =
+    Base.make(
+      el => {
+        let component = ReasonReact.statelessComponent("Text");
+        {...component, render: _ => el(None)};
+      },
+      ReasonReact.string,
+      ~tag="span",
+    );
 };
