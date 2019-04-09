@@ -31,7 +31,7 @@ It might be possible to make something with Tiki UI in its current state, but yo
   - [ ] Shadows
   - [x] Rounded corners
   - [ ] Opacity
-  - [ ] Cursor
+  - [x] Cursor
 
 Caveats: even the things that are checked off the list are under-tested.
 

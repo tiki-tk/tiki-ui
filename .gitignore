@@ -6,6 +6,3 @@
 **/*.bs.js
 .bsb.lock
 .merlin
-
-# Bundled
-/dist/

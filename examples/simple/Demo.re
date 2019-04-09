@@ -1,7 +1,7 @@
 module SimpleExample = {
-  open Element;
   module Decoration = Attribute.Decoration;
   module Sizing = Attribute.Layout.Sizing;
+  open Element;
 
   let component = ReasonReact.statelessComponent(__MODULE__);
   let make = _children => {
@@ -10,7 +10,6 @@ module SimpleExample = {
       let decoration = Decoration.[bgColor(Color.make(Grey, Lighter))];
       let sidebarDecoration = Decoration.[bgColor(Color.make(Grey, Light))];
       let headerDecoration = Decoration.[bgColor(Color.make(Blue, Base))];
-
       let logoDecoration =
         Decoration.[fontSize(LG), fontWeight(Semibold), fgColor(White)];
 
@@ -22,6 +21,18 @@ module SimpleExample = {
           hover(bgColor(Color.make(Blue, Darker))),
         ];
 
+      // here we alias Link with some built-in layout/decoration
+      module Link = {
+        let decoration =
+          Decoration.[
+            cursor(Cursor.Pointer),
+            hover(bgColor(Color.make(Grey, Lighter))),
+            hover(fgColor(Color.make(Blue, Base))),
+          ];
+
+        let make = Link.make(~paddingX=S4, ~paddingY=S2, ~decoration);
+      };
+
       <Col decoration height=Stretch>
         <Row decoration=headerDecoration paddingX=S4 paddingY=S2>
           <Text alignY=Center decoration=logoDecoration> "App Name" </Text>
@@ -30,14 +41,15 @@ module SimpleExample = {
           </Button>
         </Row>
         <Row height=Stretch>
-          <Col decoration=sidebarDecoration width={Sizing.rem(12.0)}>
-            <Link padding=S4> <Text> "Overview" </Text> </Link>
-            <Link padding=S4> <Text> "Contacts" </Text> </Link>
-            <Link padding=S4> <Text> "Reports" </Text> </Link>
+          <Col
+            decoration=sidebarDecoration width={Sizing.rem(12.0)} paddingY=S8>
+            <Link> <Text> "Overview" </Text> </Link>
+            <Link> <Text> "Contacts" </Text> </Link>
+            <Link> <Text> "Reports" </Text> </Link>
           </Col>
-          <Col>
+          <Col padding=S8>
             <H1> <Text> "Contacts" </Text> </H1>
-            <P padding=S2> <Text> "This is more content" </Text> </P>
+            <P paddingY=S2> <Text> "This is more content" </Text> </P>
           </Col>
         </Row>
       </Col>;

@@ -56,4 +56,5 @@ let toStyle =
   fun
   | Exact(Px(v)) => Some(string_of_int(v) ++ "px")
   | Exact(Rem(v)) => Some(Js.String.make(v) ++ "rem")
-  | _ => None;
+  | Stretch
+  | Portion(_) => None;

@@ -9,7 +9,7 @@
     "dev:bundle": "rollup --config rollup.config.js -w",
     "dev": "npm-run-all --parallel dev:reason dev:bundle",
     "prod:reason": "bsb -make-world",
-    "prod:bundle": "rollup --config rollup.config.js",
+    "prod:bundle": "rollup --config rollup.config.js && terser dist/bundle.js -m -o dist/bundle.js",
     "prod": "npm run prod:reason && npm run prod:bundle",
     "start": "npm run prod"
   },
@@ -24,6 +24,7 @@
     "rollup": "^1.1.0",
     "rollup-plugin-commonjs": "^9.2.0",
     "rollup-plugin-node-resolve": "^4.0.0",
-    "rollup-plugin-replace": "^2.1.0"
+    "rollup-plugin-replace": "^2.1.0",
+    "terser": "^3.17.0"
   }
 }
