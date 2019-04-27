@@ -1,12 +1,7 @@
 /* TODO: use Webapi */
 
-let getChildren: (. Dom.element) => array(Dom.element) = [%bs.raw
-  {|
-    function (parent) {
-      return [].slice.call(parent.children);
-    }
-  |}
-];
+let getChildren = parent =>
+  parent |> Webapi.Dom.Element.children |> Webapi.Dom.HtmlCollection.toArray;
 
 let removeClasses: (. array(string), Dom.element) => unit = [%bs.raw
   {|

@@ -11,72 +11,23 @@ module Base = {
         ~tag="div",
         ~className="",
         ~decoration=[],
-        ~padding=?,
-        ~paddingX=?,
-        ~paddingY=?,
-        ~paddingTop=?,
-        ~paddingBottom=?,
-        ~paddingLeft=?,
-        ~paddingRight=?,
-        ~onClick=?,
+        ~height=Layout.Sizing.Stretch,
+        ~width=Layout.Sizing.Stretch,
         ~alignX=Layout.Align.Start,
         ~alignY=Layout.Align.Start,
-        ~height=?,
-        ~width=?,
+        ~padding=Layout.Spacing.Size.S0,
+        ~paddingX=Layout.Spacing.Size.S0,
+        ~paddingY=Layout.Spacing.Size.S0,
+        ~onClick=?,
         children,
       ) => {
-    let combineStyles = xs =>
-      L.foldLeft(ReactDOMRe.Style.combine, ReactDOMRe.Style.make(), xs);
-
-    let paddingToClassName = side =>
-      O.foldStrict("", v =>
-        Layout.Spacing.(make(Padding, side, v) |> toClassName)
-      );
-
-    let paddingClasses = [
-      paddingToClassName(All, padding),
-      paddingToClassName(Horizontal, paddingX),
-      paddingToClassName(Vertical, paddingY),
-      paddingToClassName(Top, paddingTop),
-      paddingToClassName(Bottom, paddingBottom),
-      paddingToClassName(Left, paddingLeft),
-      paddingToClassName(Right, paddingRight),
-    ];
-
-    let alignmentClasses = [
-      Layout.Align.toClassNameForDir(X, alignX),
-      Layout.Align.toClassNameForDir(Y, alignY),
-    ];
-
-    let sizingClasses =
-      L.catOptions([
-        O.flatMap(Layout.Height.toClassName, height),
-        O.flatMap(Layout.Width.toClassName, width),
-      ]);
-
-    let decorationClasses = decoration |> L.map(Decoration.toClassName);
-
     let className =
-      ClassName.flatten([
-        [className],
-        alignmentClasses,
-        sizingClasses,
-        paddingClasses,
-        decorationClasses,
-      ]);
-
-    let style =
-      [
-        height |> O.flatMap(Layout.Height.toStyle),
-        width |> O.flatMap(Layout.Width.toStyle),
-      ]
-      |> L.catOptions
-      |> combineStyles;
-
+      className
+      ++ (decoration |> L.map(Decoration.toClassName) |> L.String.join);
     transform(r =>
       ReactDOMRe.createElementVariadic(
         tag,
-        ~props=ReactDOMRe.props(~ref=?r, ~style, ~className, ~onClick?, ()),
+        ~props=ReactDOMRe.props(~ref=?r, ~className, ~onClick?, ()),
         A.map(transformChildren, children),
       )
     );
@@ -107,22 +58,18 @@ module Directional = {
 
     switch (container) {
     | Some(el) =>
-      DomUtil.getChildren(. el)
+      DomUtil.getChildren(el)
       |> A.tailOrEmpty
       |> A.forEach(el => {
            DomUtil.removeClasses(. allMarginClasses, el);
-           O.foldStrict(
-             (),
-             cn => DomUtil.addClass(. cn, el),
-             currentMarginClass,
-           );
+           O.forEach(cn => DomUtil.addClass(. cn, el), currentMarginClass);
          })
     | None => ()
     };
   };
 
-  let make' = (debug, direction, spacing, el) => {
-    let component = ReasonReact.reducerComponent(debug);
+  let make' = (direction, spacing, el) => {
+    let component = ReasonReact.reducerComponent("");
     {
       ...component,
       initialState: () => {el: ref(None)},
@@ -138,12 +85,7 @@ module Directional = {
 
   let make = (~direction, ~spacing=?) => {
     let className = Layout.Direction.toClassName(direction);
-    let debug =
-      switch (direction) {
-      | Row => "Row"
-      | Col => "Col"
-      };
-    Base.make(make'(debug, direction, spacing), a => a, ~className);
+    Base.make(make'(direction, spacing), a => a, ~className);
   };
 };
 
