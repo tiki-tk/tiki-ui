@@ -1,6 +1,4 @@
-module A = Relude.Array;
-module L = Relude.List;
-module O = Relude.Option;
+open Relude.Globals;
 
 module Base = {
   open Attribute;
@@ -23,12 +21,12 @@ module Base = {
       ) => {
     let className =
       className
-      ++ (decoration |> L.map(Decoration.toClassName) |> L.String.join);
+      ++ (decoration |> List.map(Decoration.toClassName) |> List.String.join);
     transform(r =>
       ReactDOMRe.createElementVariadic(
         tag,
         ~props=ReactDOMRe.props(~ref=?r, ~className, ~onClick?, ()),
-        A.map(transformChildren, children),
+        Array.map(transformChildren, children),
       )
     );
   };
@@ -52,17 +50,20 @@ module Directional = {
       Layout.Spacing.(make(Margin, side, size) |> toClassName);
 
     let allMarginClasses =
-      Layout.Spacing.Size.each |> L.map(classNameForSize) |> L.toArray;
+      Layout.Spacing.Size.each |> List.map(classNameForSize) |> List.toArray;
 
-    let currentMarginClass = O.map(classNameForSize, amt);
+    let currentMarginClass = Option.map(classNameForSize, amt);
 
     switch (container) {
     | Some(el) =>
       DomUtil.getChildren(el)
-      |> A.tailOrEmpty
-      |> A.forEach(el => {
+      |> Array.tailOrEmpty
+      |> Array.forEach(el => {
            DomUtil.removeClasses(. allMarginClasses, el);
-           O.forEach(cn => DomUtil.addClass(. cn, el), currentMarginClass);
+           Option.forEach(
+             cn => DomUtil.addClass(. cn, el),
+             currentMarginClass,
+           );
          })
     | None => ()
     };

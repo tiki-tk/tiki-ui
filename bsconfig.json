@@ -1,10 +1,11 @@
 {
   "name": "tiki-ui",
-  "bsc-flags": ["-bs-super-errors"],
+  "bsc-flags": [],
   "reason": {
     "react-jsx": 2
   },
   "bs-dependencies": [
+    "bs-abstract",
     "bs-webapi",
     "reason-react",
     "relude"

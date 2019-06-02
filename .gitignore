@@ -6,3 +6,6 @@
 **/*.bs.js
 .bsb.lock
 .merlin
+
+# Build tools
+.cache/

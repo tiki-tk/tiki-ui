@@ -14,9 +14,10 @@
     "start": "npm run prod"
   },
   "dependencies": {
+    "bs-abstract": "^0.17.0",
     "bs-webapi": "^0.13.6",
     "reason-react": "^0.7.0",
-    "relude": "github:reazen/relude"
+    "relude": "^0.12.1"
   },
   "devDependencies": {
     "bs-platform": "^5.0.3",

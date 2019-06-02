@@ -1,8 +1,5 @@
 [@bs.config {jsx: 3}];
-
-module Array = Relude.Array;
-module List = Relude.List;
-module Option = Relude.Option;
+open Relude.Globals;
 
 module Base = {
   open Attribute;
