@@ -1,4 +1,3 @@
-[@bs.config {jsx: 3}];
 open Relude.Globals;
 
 module Base = {
@@ -22,6 +21,7 @@ module Base = {
         ~paddingRight=?,
         ~height=?,
         ~width=?,
+        ~onClick=?,
         ~children,
       ) => {
     let paddingToClassName = (side, amt) =>
@@ -65,7 +65,7 @@ module Base = {
 
     ReactDOMRe.createElementVariadic(
       tag,
-      ~props=ReactDOMRe.props(~className, ~style, ()),
+      ~props=ReactDOMRe.props(~className, ~style, ~onClick?, ()),
       [|transformChildren(children)|],
     );
   };
@@ -83,20 +83,26 @@ module Directional = {
       ]
       |> List.catOptions
       |> List.String.joinWith(" ");
-    Base.makeProps(~transformChildren=v => v, ~className);
+    Base.makeProps(~transformChildren=id, ~className);
   };
 };
 
 module Simple = {
   let make = Base.make;
   let makeProps = (~children) =>
-    Base.makeProps(~transformChildren=v => v, ~className="", ~children);
+    Base.makeProps(~transformChildren=id, ~className="", ~children);
 };
 
 module Row = {
   let make = Directional.make;
   let makeProps = (~children) =>
     Directional.makeProps(~direction=Row, ~children);
+};
+
+module Col = {
+  let make = Directional.make;
+  let makeProps = (~children) =>
+    Directional.makeProps(~direction=Col, ~children);
 };
 
 module Span = {
@@ -109,6 +115,26 @@ module El = {
   let makeProps = Simple.makeProps(~tag="div");
 };
 
+module P = {
+  let make = Simple.make;
+  let makeProps = Simple.makeProps(~tag="p");
+};
+
+module Button = {
+  let make = Simple.make;
+  let makeProps = Simple.makeProps(~tag="button");
+};
+
+module H1 = {
+  let make = Simple.make;
+  let makeProps = Simple.makeProps(~tag="h1");
+};
+
+module Link = {
+  let make = Simple.make;
+  let makeProps = Simple.makeProps(~tag="a");
+};
+
 module Text = {
   let make = Base.make;
   let makeProps = (~children) =>
@@ -119,6 +145,3 @@ module Text = {
       ~children,
     );
 };
-
-let foo = <El> <Text> "Hi" </Text> </El>;
-ReactDOMRe.renderToElementWithId(foo, "app");

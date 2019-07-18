@@ -35,6 +35,12 @@ It might be possible to make something with Tiki UI in its current state, but yo
 
 Caveats: even the things that are checked off the list are under-tested.
 
+**Hooks Migration**
+
+Tiki UI is being updated with React Hooks support! While the migration is mostly complete, there are a few things that might not be working quite right in the new version.
+
+Specifically, "spacing" was previously added to children by tracking a `ref` to the parent, then on `willReceiveProps`, each DOM node child would have its spacing class updated. This doesn't map cleanly to hooks (and was gross even before hooks). Now we add a custom spacing class (one that doesn't exist in Tailwind) to the parent, but I'm not confident this is being used.
+
 ## Run this thing
 
 ```bash

@@ -2,7 +2,7 @@
   "name": "tiki-ui",
   "bsc-flags": [],
   "reason": {
-    "react-jsx": 2
+    "react-jsx": 3
   },
   "bs-dependencies": [
     "bs-abstract",
