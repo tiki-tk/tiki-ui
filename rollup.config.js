@@ -39,7 +39,7 @@ const reactPlugins = [
 ];
 
 export default {
-  input: 'examples/simple/Demo.bs.js',
+  input: 'examples/AppExample.bs.js',
   output: {
     file: 'dist/bundle.js',
     name: "bundle",
