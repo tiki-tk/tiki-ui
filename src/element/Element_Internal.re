@@ -105,14 +105,14 @@ module Col = {
     Directional.makeProps(~direction=Col, ~children);
 };
 
-module Span = {
-  let make = Simple.make;
-  let makeProps = Simple.makeProps(~tag="span");
-};
-
 module El = {
   let make = Simple.make;
   let makeProps = Simple.makeProps(~tag="div");
+};
+
+module Span = {
+  let make = Simple.make;
+  let makeProps = Simple.makeProps(~tag="span");
 };
 
 module P = {
