@@ -8,7 +8,8 @@
     "bs-abstract",
     "bs-webapi",
     "reason-react",
-    "relude"
+    "relude",
+    "tiki-tailwind"
   ],
   "sources": [
     {
