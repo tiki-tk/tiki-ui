@@ -1,6 +1,3 @@
-module L = Relude.List;
-module O = Relude.Option;
-
 module Color = {
   include Tailwind.Color;
 };

@@ -1,5 +1,4 @@
-module L = Relude.List;
-module O = Relude.Option;
+open Relude.Globals;
 
 module Direction = {
   type t =
@@ -23,15 +22,19 @@ module Sizing = {
 };
 
 module Width = {
-  let toClassName = v => Sizing.toClassName(v) |> O.map(str => "w-" ++ str);
+  let toClassName = v =>
+    Sizing.toClassName(v) |> Option.map(str => "w-" ++ str);
   let toStyle = v =>
-    Sizing.toStyle(v) |> O.map(width => ReactDOMRe.Style.make(~width, ()));
+    Sizing.toStyle(v)
+    |> Option.map(width => ReactDOMRe.Style.make(~width, ()));
 };
 
 module Height = {
-  let toClassName = v => Sizing.toClassName(v) |> O.map(str => "h-" ++ str);
+  let toClassName = v =>
+    Sizing.toClassName(v) |> Option.map(str => "h-" ++ str);
   let toStyle = v =>
-    Sizing.toStyle(v) |> O.map(height => ReactDOMRe.Style.make(~height, ()));
+    Sizing.toStyle(v)
+    |> Option.map(height => ReactDOMRe.Style.make(~height, ()));
 };
 
 module Align = {

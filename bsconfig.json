@@ -5,7 +5,7 @@
     "react-jsx": 3
   },
   "bs-dependencies": [
-    "bs-abstract",
+    "bs-bastet",
     "bs-webapi",
     "reason-react",
     "relude",
@@ -29,6 +29,6 @@
   "suffix": ".bs.js",
   "warnings": {
     "number": "+A-9-40-41-42",
-    "error": "+8+11"
+    "error": "+A"
   }
 }
